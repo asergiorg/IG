@@ -2,19 +2,18 @@
   "name": "threejs-example",
   "version": "1.0.0",
   "description": "Demo basic scene",
-  "main": "index.html",
   "scripts": {
     "start": "parcel index.html --open",
     "build": "parcel build index.html"
   },
   "dependencies": {
-    "three": "0.116.1"
-  },
-  "devDependencies": {
-    "parcel-bundler": "^1.6.1"
+    "three": "^0.116.1"
   },
   "keywords": [
     "threejs",
     "example"
-  ]
+  ],
+  "devDependencies": {
+    "parcel": "^2.16.4"
+  }
 }

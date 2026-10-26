@@ -1,0 +1,4 @@
+# Verify local dependencies do not 
+node_modules
+dist
+.parcel-cache
