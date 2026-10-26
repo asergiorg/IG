@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <title>Parcel Sandbox</title>
+    <meta charset="UTF-8" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      /* 1. Contenedor que agrupa ambas capas */
+      #app {
+        position: relative;
+        width: 800px;
+        height: 600px;
+      }
+
+      /* 2. El canvas ocupa el fondo */
+      #miCanvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: #f0f0f0; /* Para que veas dónde está */
+      }
+
+      /* 3. La imagen escalada se sobrepone */
+      .imagen-capa {
+        position: absolute;
+        top: 50px; /* Distancia desde arriba */
+        left: 100px; /* Distancia desde la izquierda */
+        width: 250px; /* Aquí escalas el ancho */
+        height: auto; /* Mantiene la proporción */
+        z-index: 10; /* Asegura que esté por encima */
+        pointer-events: none; /* Opcional: permite que los clics traspasen al canvas */
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app">
+      <canvas id="miCanvas" width="800" height="600"></canvas>
+      <img
+        src="Nabe.png"
+        class="imagen-capa"
+        alt="Capa sobrepuesta"
+      />
+    </div>
+    <script src="src/index.js"></script>
+  </body>
+</html>
