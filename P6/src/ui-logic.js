@@ -25,6 +25,7 @@ toggleCabina.addEventListener('change', (e) => {
   }
 });
 
+// Muestra u oculta el tutorial
 toggleTutorial.addEventListener('change', (e) => {
   const mostrar = e.target.checked;
   const enLaNave = toggleCabina.checked;

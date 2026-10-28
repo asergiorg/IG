@@ -42,11 +42,6 @@ export function initKeyboardControls(cam, orbitControls, options = {}) {
   window.addEventListener("keyup", onKeyUp);
 }
 
-// Permite cambiar la acción del espacio en cualquier momento
-export function setSpaceAction(callback) {
-  onSpace = callback;
-}
-
 export function updateKeyboardControls(delta) {
   const { w, a, s, d } = keys;
 
@@ -69,11 +64,4 @@ export function updateKeyboardControls(delta) {
     camera.position.add(move);
     controls.target.add(move);
   }
-}
-
-export function disposeKeyboardControls() {
-  window.removeEventListener("keydown", onKeyDown);
-  window.removeEventListener("keyup", onKeyUp);
-  keys.w = keys.a = keys.s = keys.d = false;
-  onSpace = null;
 }

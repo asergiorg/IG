@@ -20,8 +20,3 @@ export function getNextData() {
 
   return data;
 }
-
-export function resetData() {
-  planetIndex = 0;
-  factCounters.fill(0);
-}
