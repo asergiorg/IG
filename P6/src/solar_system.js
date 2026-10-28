@@ -20,6 +20,10 @@ import urlUranus from "url:../textures/uranus.jpg";
 import urlNeptune from "url:../textures/neptune.jpg";
 import urlStars from "url:../textures/stars.jpg";
 
+// ---- Texturas de lunas ----
+import urlIo from "url:../textures/io.jpg";
+import urlEuropa from "url:../textures/europa.jpg";
+
 let space;
 let loader;
 const objects = []; // cuerpos que giran sobre su eje
@@ -75,19 +79,17 @@ export function createSolarSystem(scene) {
   );
   earth.mesh.add(clouds);
 
-  const moonPivot = new THREE.Object3D();
-  earth.group.add(moonPivot);
+  addSateliteTo(earth, { radius: 0.27, distance: 2.2, orbitSpeed: 0.04, map: loadUrl(urlMoon)  })
 
-  const moon = new THREE.Mesh(
-    new THREE.SphereGeometry(0.27, 32, 32),
-    new THREE.MeshPhongMaterial({ map: loadUrl(urlMoon) })
-  );
-  moon.position.set(2.2, 0, 0);
-  moonPivot.add(moon);
-  orbits.push({ pivot: moonPivot, speed: 0.04 });
+  // MARTE + FOBOS y DEIMOS
+  const mars = createPlanet({ radius: 0.6, distance: 25, orbitSpeed: 0.008, spin: 0.009, map: loadUrl(urlMars) });
+  addSateliteTo(mars, { radius: 0.1, distance: 1.1, orbitSpeed: 0.09, color: 0x8a7b6b }); // Fobos
+  addSateliteTo(mars, { radius: 0.07, distance: 1.6, orbitSpeed: 0.05, color: 0x9b8d7c }); // Deimos
 
-  createPlanet({ radius: 0.6, distance: 25, orbitSpeed: 0.008, spin: 0.009, map: loadUrl(urlMars) });
-  createPlanet({ radius: 3, distance: 37, orbitSpeed: 0.004, spin: 0.02, map: loadUrl(urlJupiter) });
+  // JÚPITER + ÍO y EUROPA
+  const jupiter = createPlanet({ radius: 3, distance: 37, orbitSpeed: 0.004, spin: 0.02, map: loadUrl(urlJupiter) });
+  addSateliteTo(jupiter, { radius: 0.3, distance: 4.2, orbitSpeed: 0.03, map: loadUrl(urlIo) });
+  addSateliteTo(jupiter, { radius: 0.27, distance: 5.3, orbitSpeed: 0.02, map: loadUrl(urlEuropa) });
 
   // SATURNO con anillos
   const saturn = createPlanet({
@@ -101,8 +103,14 @@ export function createSolarSystem(scene) {
   ring.rotation.x = -Math.PI / 2 + 0.45;
   saturn.group.add(ring);
 
-  createPlanet({ radius: 1.6, distance: 62, orbitSpeed: 0.002, spin: 0.012, map: loadUrl(urlUranus) });
-  createPlanet({ radius: 1.55, distance: 72, orbitSpeed: 0.0016, spin: 0.012, map: loadUrl(urlNeptune) });
+  // URANO + TITANIA y OBERÓN
+  const uranus = createPlanet({ radius: 1.6, distance: 62, orbitSpeed: 0.002, spin: 0.012, map: loadUrl(urlUranus) });
+  addSateliteTo(uranus, { radius: 0.25, distance: 2.9, orbitSpeed: 0.02, color: 0x9a9690 }); // Titania
+  addSateliteTo(uranus, { radius: 0.23, distance: 3.7, orbitSpeed: 0.015, color: 0x857f78 }); // Oberón
+
+  // NEPTUNO + TRITÓN (orbita en sentido contrario, por eso velocidad negativa)
+  const neptune = createPlanet({ radius: 1.55, distance: 72, orbitSpeed: 0.0016, spin: 0.012, map: loadUrl(urlNeptune) });
+  addSateliteTo(neptune, { radius: 0.3, distance: 3.0, orbitSpeed: -0.025, color: 0xd8c9c0 });
 }
 
 export function renderSolarSystem() {
@@ -176,4 +184,16 @@ function createRing(interior, external, texture) {
     depthWrite: false,
   });
   return new THREE.Mesh(geometry, material);
+}
+
+function addSateliteTo(planet, { radius, distance, orbitSpeed, map, color = 0xffffff } ) {
+  const moonPivot = new THREE.Object3D();
+  planet.group.add(moonPivot);
+
+  const material = new THREE.MeshPhongMaterial(map ? { map: map } : { color: color });
+  const moon = new THREE.Mesh(new THREE.SphereGeometry(radius, 32, 32), material);
+
+  moon.position.set(distance, 0, 0);
+  moonPivot.add(moon);
+  orbits.push({ pivot: moonPivot, speed: orbitSpeed });
 }

@@ -1,10 +1,11 @@
 # Trabajo realizado
 
-Para animar el sistema solar se ha dividido el script original, resultado de combinar el material de ejemplo en las clases, en dos ficheros. El fichero `index.js` ha conservado únicamente la función `init` y `animationLoop`, con el fin de mejorar la legibilidad. El fichero `solar_system.js` contiene la lógica de graficado. 
+Para animar el sistema solar se ha dividido el script original, resultado de combinar el material de ejemplo en las clases, en dos ficheros. El fichero `index.js` ha conservado únicamente la función `init` y `animationLoop`, con el fin de mejorar la legibilidad. El fichero `solar_system.js` contiene la lógica de graficado.
 
 En primer lugar, se encuentran las funciones que se llaman desde `index.js`, que sirven para crear el sistema solar, `createSolarSystem`, y para actualizar la posición de la óbita de los cuerpos celestes de este, `renderSolarSystem`. Cabe mencionar que, en la primera función, al poseer el mapa de nubes, y un satélite, la creación de la Tierra, junto con la de Saturno, requiere de mayor trabajo. Para la Tierra, es necesario crear el planeta, crear la capa de nubes, que comparte una rotación solidaria la Tierra, y añadirla a su grupo, y crear la luna, con su respectivo pivote :
 
 ~~~javascript
+  // TIERRA + LUNA
   const earth = createPlanet({
     radius: 1,
     distance: 19,
@@ -28,16 +29,7 @@ En primer lugar, se encuentran las funciones que se llaman desde `index.js`, que
   );
   earth.mesh.add(clouds);
 
-  const moonPivot = new THREE.Object3D();
-  earth.group.add(moonPivot);
-
-  const moon = new THREE.Mesh(
-    new THREE.SphereGeometry(0.27, 32, 32),
-    new THREE.MeshPhongMaterial({ map: loadUrl(urlMoon) })
-  );
-  moon.position.set(2.2, 0, 0);
-  moonPivot.add(moon);
-  orbits.push({ pivot: moonPivot, speed: 0.04 });
+  addSateliteTo(earth, { radius: 0.27, distance: 2.2, orbitSpeed: 0.04, map: loadUrl(urlMoon)  })
 ~~~
 
 En el caso de Saturno, es más sencillo, ya que se crean el planeta y su anillo, con las funciones creadas para ello, y establecer la rotación de este último
@@ -56,7 +48,7 @@ En el caso de Saturno, es más sencillo, ya que se crean el planeta y su anillo,
   saturn.group.add(ring);
 ~~~
 
-En segundo lugar, se declaran las funciones auxiliares, que sirven para cargar las URL de las imágenes, `loadUrl`, crear los planetas `createPlanet`, y para crear el anillo de saturno, `createRing`. Se destacan de estas la primera, que reduce la cantidad de parámetros necesarios para su ejecución. Esto se logra desplazando los planetas en el eje x el valor correspondiente a la distancia a su pivote, o elemento sobre el que giran: 
+En segundo lugar, se declaran las funciones auxiliares, que sirven para cargar las URL de las imágenes, `loadUrl`, crear los planetas `createPlanet`, y para crear el anillo de saturno, `createRing`. Se destacan de estas la primera, que reduce la cantidad de parámetros necesarios para su ejecución. Esto se logra desplazando los planetas en el eje x el valor correspondiente a la distancia a su pivote, o elemento sobre el que giran:
 
 ~~~javascript
 function createPlanet({ radius, distance, orbitSpeed, spin, map, bump, spec }) {
@@ -130,12 +122,28 @@ function createRing(interior, external, texture) {
 }
 ~~~
 
+Por último, con el fin de poder añadir tantas lunas como fuese necesario, simplificando el código y evitando la repetición del mismo, se creo la función `addSateliteTo`, que permite crear y añadir un satélite al planeta que recibe como parámetro:
+
+~~~javascript
+function addSateliteTo(planet, { radius, distance, orbitSpeed, map, color = 0xffffff } ) {
+  const moonPivot = new THREE.Object3D();
+  planet.group.add(moonPivot);
+
+  const material = new THREE.MeshPhongMaterial(map ? { map: map } : { color: color });
+  const moon = new THREE.Mesh(new THREE.SphereGeometry(radius, 32, 32), material);
+
+  moon.position.set(distance, 0, 0);
+  moonPivot.add(moon);
+  orbits.push({ pivot: moonPivot, speed: orbitSpeed });
+}
+~~~
+
 # Fuentes
 ## Textura de los planetas
 Para las texturas del planeta tierra:
 https://gis.humboldt.edu/Archive/GISData/2019/WGS84_Geographic/3DTextures/
 
-Para las texturas del resto de planetas, el sol y la luna:
+Para las texturas del resto de cuerpos celestes:
 https://www.solarsystemscope.com/textures/
 
 ## Conversaciones con la IA
