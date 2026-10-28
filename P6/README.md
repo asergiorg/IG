@@ -32,7 +32,7 @@ En primer lugar, se encuentran las funciones que se llaman desde `index.js`, que
   addSateliteTo(earth, { radius: 0.27, distance: 2.2, orbitSpeed: 0.04, map: loadUrl(urlMoon)  })
 ~~~
 
-En el caso de Saturno, es más sencillo, ya que se crean el planeta y su anillo, con las funciones creadas para ello, y establecer la rotación de este último
+En el caso de Saturno, es más sencillo, ya que se crean el planeta y su anillo, con las funciones creadas para ello, y establecer la rotación de este último:
 
 ~~~javascript
   // SATURNO con anillos
@@ -150,5 +150,12 @@ https://www.solarsystemscope.com/textures/
 Para crear la imagen de la nave espacial:
 https://chatgpt.com/share/6adfa1a5-04cc-83ed-bc77-99fc9944c56d
 
+Para crear el tutorial:
+https://chatgpt.com/share/6ae1ccb9-12dc-83ed-9e57-110113c4b755
+
 Para la interfaz gráfica:
 https://share.gemini.google/GY2ITn56k7Ab
+
+Para el desarrollo del movimiento de la nave:
+https://claude.ai/share/4a8268d1-3c67-4b91-a699-38f212ad6f50
+
