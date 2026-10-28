@@ -138,6 +138,132 @@ function addSateliteTo(planet, { radius, distance, orbitSpeed, map, color = 0xff
 }
 ~~~
 
+## Añadidos
+
+Como trabajo adicional, se ha desarrollado el siguiente script, con ayuda de la Inteligencia Artificial, para permitir el movimiento de la cámara, tanto en la vista de la nave como en la vista general, con el fin de permitir descubrir el universo de forma lúdica. Este script está dividido en funciones principales y funciones secundarias, que se utilizan en las principales. Las secundarias gestionan el evento de pulsación de una tecla para registrarlo y modificarlo cuando se libere la pulsación:
+
+~~~javascript
+function onKeyDown(e) {
+  // Espacio: acción puntual (una vez por pulsación)
+  if (e.code === "Space") {
+    e.preventDefault(); // evita que la página haga scroll
+    if (!e.repeat && onSpace) onSpace();
+    return;
+  }
+
+  const k = e.key.toLowerCase();
+  if (k in keys) keys[k] = true;
+}
+
+function onKeyUp(e) {
+  const k = e.key.toLowerCase();
+  if (k in keys) keys[k] = false;
+}
+~~~
+
+Una vez definidas las funciones secundarias, se hace uso de las principales para establecer las variables con las que se opera, con la función `initKeyboardControls`, y se actualiza la posición de la cámara, con `updateKeyboardControls`. En el caso de la segunda, se divide el movimiento en rotación de la cámara y el movimiento hacia delante y hacia detrás, comprobando que no se pulsen simultáneamente teclas que se anulen. Esto se hace así para buscar un movimiento lo más similar al de una nave espacial real:
+
+~~~javascript
+export function initKeyboardControls(cam, orbitControls, options = {}) {
+  camera = cam;
+  controls = orbitControls;
+  speed = options.speed ?? speed;
+  turnSpeed = options.turnSpeed ?? turnSpeed;
+  onSpace = options.onSpace ?? onSpace;
+
+  window.addEventListener("keydown", onKeyDown);
+  window.addEventListener("keyup", onKeyUp);
+}
+
+export function updateKeyboardControls(delta) {
+  const { w, a, s, d } = keys;
+
+  // --- Giro sobre uno mismo (A/D) ---
+  const turn = (a ? 1 : 0) - (d ? 1 : 0);
+  if (turn !== 0) {
+    offset.copy(controls.target).sub(camera.position);
+    offset.applyAxisAngle(UP, turn * turnSpeed * delta);
+    controls.target.copy(camera.position).add(offset);
+  }
+
+  // --- Avance / retroceso (W/S) ---
+  const advance = (w ? 1 : 0) - (s ? 1 : 0);
+  if (advance !== 0) {
+    camera.getWorldDirection(forward);
+    forward.y = 0;
+    forward.normalize();
+
+    move.copy(forward).multiplyScalar(advance * speed * delta);
+    camera.position.add(move);
+    controls.target.add(move);
+  }
+}
+~~~
+
+Asimismo, siguiendo este patrón en la búsqueda de facilitar el aprendizaje a aquellos que hagan uso de la aplicación, se ha añadido una batería de datos curiosos sobre los distintos planetas que conforman el sistema solar, posicionándolos en un panel de la nave, para dar una sensación más inmersiva. El script lee un fichero en formato `JSON`, y retorna el dato correspondiente de forma circular:
+
+~~~javascript
+// Estado interno
+let planetIndex = 0; 
+const factCounters = planets.map(() => 0);
+
+export function getNextData() {
+  const planet = planets[planetIndex];
+  const factIndex = factCounters[planetIndex];
+
+  const data = {
+    planet: planet.name,
+    fact: planet.facts[factIndex],
+    factNumber: factIndex + 1,
+    totalFacts: planet.facts.length,
+  };
+
+  factCounters[planetIndex] = (factIndex + 1) % planet.facts.length;
+  planetIndex = (planetIndex + 1) % planets.length;
+
+  return data;
+}
+~~~
+
+Por último, atendiendo a la posible presencia de nuevos usuarios, se han diseñado dos plantillas de tutorial que permiten al usuario saber con qué puede interactuar, para lo que se ha generado un script que permite modificar la vista del canva:
+
+~~~javascript
+// Recibe el texto y lo inyecta en el recuadro
+export function write(texto) {
+  textoPantalla.innerHTML = texto;
+}
+
+// Alterna entre la nave y el exterior
+toggleCabina.addEventListener('change', (e) => {
+  const enLaNave = e.target.checked;
+  cabina.style.display = enLaNave ? 'block' : 'none';
+  
+  // Oculta también el texto holográfico si sales de la cabina
+  textoPantalla.style.display = enLaNave ? 'block' : 'none';
+  
+  if (toggleTutorial.checked) {
+    tutorialNave.style.display = enLaNave ? 'block' : 'none';
+    tutorialFuera.style.display = enLaNave ? 'none' : 'block';
+  }
+});
+
+// Muestra u oculta el tutorial
+toggleTutorial.addEventListener('change', (e) => {
+  const mostrar = e.target.checked;
+  const enLaNave = toggleCabina.checked;
+  
+  if (mostrar) {
+    tutorialNave.style.display = enLaNave ? 'block' : 'none';
+    tutorialFuera.style.display = enLaNave ? 'none' : 'block';
+  } else {
+    tutorialNave.style.display = 'none';
+    tutorialFuera.style.display = 'none';
+  }
+});
+
+write("<br>SISTEMA EN LÍNEA<br>Motores: OK<br>Escudos: 100%");
+~~~
+
 # Fuentes
 ## Textura de los planetas
 Para las texturas del planeta tierra:
