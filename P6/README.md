@@ -1,8 +1,8 @@
 # Trabajo realizado
 
-Para animar el sistema solar se ha dividido el script original, resultado de combinar el material de ejemplo en las clases, en dos ficheros. El fichero `index.js` ha conservado únicamente la función `init` y `animationLoop`, con el fin de mejorar la legibilidad. El fichero `solar_system.js` contiene la lógica de graficado.
+Para animar el sistema solar se ha dividido el script original, resultado de combinar el material de ejemplo en las clases, en dos ficheros. El fichero `index.js` ha conservado únicamente las funciones `init` y `animationLoop`, con el fin de mejorar la legibilidad. El fichero `solar_system.js` contiene la lógica de graficado.
 
-En primer lugar, se encuentran las funciones que se llaman desde `index.js`, que sirven para crear el sistema solar, `createSolarSystem`, y para actualizar la posición de la óbita de los cuerpos celestes de este, `renderSolarSystem`. Cabe mencionar que, en la primera función, al poseer el mapa de nubes, y un satélite, la creación de la Tierra, junto con la de Saturno, requiere de mayor trabajo. Para la Tierra, es necesario crear el planeta, crear la capa de nubes, que comparte una rotación solidaria la Tierra, y añadirla a su grupo, y crear la luna, con su respectivo pivote :
+En primer lugar, se encuentran las funciones que se llaman desde `index.js`, que sirven para crear el sistema solar, `createSolarSystem`, y para actualizar la posición de la órbita de los cuerpos celestes de este, `renderSolarSystem`. Cabe mencionar que, en la primera función, al poseer el mapa de nubes, y un satélite, la creación de la Tierra, junto con la de Saturno, requiere de mayor trabajo. Para la Tierra, es necesario crear el planeta, crear la capa de nubes, que comparte una rotación solidaria la Tierra, y añadirla a su grupo, y crear la luna, con su respectivo pivote :
 
 ~~~javascript
   // TIERRA + LUNA
@@ -32,7 +32,7 @@ En primer lugar, se encuentran las funciones que se llaman desde `index.js`, que
   addSateliteTo(earth, { radius: 0.27, distance: 2.2, orbitSpeed: 0.04, map: loadUrl(urlMoon)  })
 ~~~
 
-En el caso de Saturno, es más sencillo, ya que se crean el planeta y su anillo, con las funciones creadas para ello, y establecer la rotación de este último:
+En el caso de Saturno, es más sencillo, ya que se crean el planeta y su anillo, con las funciones creadas para ello, y se establece la rotación de este último:
 
 ~~~javascript
   // SATURNO con anillos
@@ -48,7 +48,7 @@ En el caso de Saturno, es más sencillo, ya que se crean el planeta y su anillo,
   saturn.group.add(ring);
 ~~~
 
-En segundo lugar, se declaran las funciones auxiliares, que sirven para cargar las URL de las imágenes, `loadUrl`, crear los planetas `createPlanet`, y para crear el anillo de saturno, `createRing`. Se destacan de estas la primera, que reduce la cantidad de parámetros necesarios para su ejecución. Esto se logra desplazando los planetas en el eje x el valor correspondiente a la distancia a su pivote, o elemento sobre el que giran:
+En segundo lugar, se declaran las funciones auxiliares, que sirven para cargar las URL de las imágenes, `loadUrl`, crear los planetas `createPlanet`, y para crear el anillo de Saturno, `createRing`. Se destacan de estas la primera, que reduce la cantidad de parámetros necesarios para su ejecución. Esto se logra desplazando los planetas en el eje x el valor correspondiente a la distancia a su pivote, o elemento sobre el que giran:
 
 ~~~javascript
 function createPlanet({ radius, distance, orbitSpeed, spin, map, bump, spec }) {
@@ -60,7 +60,7 @@ function createPlanet({ radius, distance, orbitSpeed, spin, map, bump, spec }) {
   pivot.add(group);
 ~~~
 
-Una vez definidos el pivote y la distancia a estos, se crea el material, modificándolo si fuera necesario, y se crea el elemento al que se le asignará el mapa de texturas:
+Una vez definidos el pivote y la distancia a este, se crea el material, modificándolo si fuera necesario, y se crea el elemento al que se le asignará el mapa de texturas:
 
 ~~~javascript
   const material = new THREE.MeshPhongMaterial({ map: map });
@@ -77,7 +77,7 @@ Una vez definidos el pivote y la distancia a estos, se crea el material, modific
   group.add(mesh);
 ~~~
 
-Como añadido, se dibuja el anillo de la órbita que describe el planeta, utilizando la función  para crearla y añadirla al espacio. Una vez añadidas las órbitas, solo resta almacenar el objeto y la órbita en sus respectivas listas para poder animar el movimiento del sistema solar:
+Como añadido, se dibuja el anillo de la órbita que describe el planeta y se añade al espacio. Tras esto, solo resta almacenar el objeto y la órbita en sus respectivas listas para poder animar el movimiento del sistema solar:
 
 ~~~javascript
   // Línea de la órbita
@@ -140,7 +140,7 @@ function addSateliteTo(planet, { radius, distance, orbitSpeed, map, color = 0xff
 
 ## Añadidos
 
-Como trabajo adicional, se ha desarrollado el siguiente script, con ayuda de la Inteligencia Artificial, para permitir el movimiento de la cámara, tanto en la vista de la nave como en la vista general, con el fin de permitir descubrir el universo de forma lúdica. Este script está dividido en funciones principales y funciones secundarias, que se utilizan en las principales. Las secundarias gestionan el evento de pulsación de una tecla para registrarlo y modificarlo cuando se libere la pulsación:
+Como trabajo adicional, se ha desarrollado el siguiente script, con ayuda de la Inteligencia Artificial, para permitir el movimiento de la cámara, tanto en la vista de la nave como en la vista general, con el fin de facilitar descubrir el universo de forma lúdica. Este script está dividido en funciones principales y funciones secundarias, que se utilizan en las principales. Las secundarias gestionan el evento de pulsación de una tecla para registrarlo y modificarlo cuando se libere la pulsación:
 
 ~~~javascript
 function onKeyDown(e) {
@@ -225,7 +225,7 @@ export function getNextData() {
 }
 ~~~
 
-Por último, atendiendo a la posible presencia de nuevos usuarios, se han diseñado dos plantillas de tutorial que permiten al usuario saber con qué puede interactuar, para lo que se ha generado un script que permite modificar la vista del canva:
+Por último, atendiendo a la posible presencia de nuevos usuarios, se han diseñado dos plantillas de tutorial que permiten al usuario saber con qué puede interactuar, para lo que se ha generado un script que permite modificar la vista del canvas:
 
 ~~~javascript
 // Recibe el texto y lo inyecta en el recuadro
@@ -264,9 +264,17 @@ toggleTutorial.addEventListener('change', (e) => {
 write("<br>SISTEMA EN LÍNEA<br>Motores: OK<br>Escudos: 100%");
 ~~~
 
+# Demostración de las dos vistas
+
+https://github.com/user-attachments/assets/b7886953-00ab-4a33-9200-103bb310d71c
+
+https://github.com/user-attachments/assets/688d3f17-19b7-4eb5-acc8-25644339e621
+
+[▶️ Vídeo completo sin editar y mayor calidad](https://drive.google.com/file/d/1vbUqjLxd7hp-gRDoNRTWxBkiwkjcLKss/view?usp=sharing)
+
 # Fuentes
 ## Textura de los planetas
-Para las texturas del planeta tierra:
+Para las texturas del planeta Tierra:
 https://gis.humboldt.edu/Archive/GISData/2019/WGS84_Geographic/3DTextures/
 
 Para las texturas de las lunas de los planetas:
