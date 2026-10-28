@@ -38,4 +38,4 @@ toggleTutorial.addEventListener('change', (e) => {
   }
 });
 
-write("SISTEMA EN LÍNEA<br>Motores: OK<br>Escudos: 100%");
+write("<br>SISTEMA EN LÍNEA<br>Motores: OK<br>Escudos: 100%");

@@ -143,6 +143,9 @@ function addSateliteTo(planet, { radius, distance, orbitSpeed, map, color = 0xff
 Para las texturas del planeta tierra:
 https://gis.humboldt.edu/Archive/GISData/2019/WGS84_Geographic/3DTextures/
 
+Para las texturas de las lunas de los planetas:
+https://github.com/MTE1991/SolSisSim/tree/main/public/textures
+
 Para las texturas del resto de cuerpos celestes:
 https://www.solarsystemscope.com/textures/
 
@@ -161,3 +164,6 @@ https://claude.ai/share/4a8268d1-3c67-4b91-a699-38f212ad6f50
 
 Para generar los datos sobre los planetas:
 https://chatgpt.com/share/6ae1e506-acc8-83eb-9bf2-c8ef5fce41de
+
+Para configurar la forma en que se muestran los datos sobre los planetas:
+https://share.gemini.google/7THz2ToPm5wL

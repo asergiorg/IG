@@ -44,7 +44,11 @@ function init() {
     turnSpeed: 1.2,
     onSpace: () => {
       let data = getNextData();
-      data = data["planet"] + "<br>" + data["fact"];
+      data = '<div style="margin-bottom: 8px;">' + data["planet"] + '</div>' + 
+       data["fact"] + 
+       '<div style="position: absolute; bottom: 10px; right: 10px;">' + 
+       data["factNumber"] + "/" + data["totalFacts"] + 
+       '</div>';
       write(data);
     },
   });
