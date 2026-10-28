@@ -159,3 +159,5 @@ https://share.gemini.google/GY2ITn56k7Ab
 Para el desarrollo del movimiento de la nave:
 https://claude.ai/share/4a8268d1-3c67-4b91-a699-38f212ad6f50
 
+Para generar los datos sobre los planetas:
+https://chatgpt.com/share/6ae1e506-acc8-83eb-9bf2-c8ef5fce41de

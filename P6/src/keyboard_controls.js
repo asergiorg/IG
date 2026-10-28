@@ -2,8 +2,9 @@ import * as THREE from "three";
 
 // Estado del módulo
 let camera, controls;
-let speed = 40;     // unidades por segundo (avance)
+let speed = 40;      // unidades por segundo (avance)
 let turnSpeed = 1.2; // radianes por segundo (giro)
+let onSpace = null;  // acción al pulsar espacio
 
 const keys = { w: false, a: false, s: false, d: false };
 
@@ -13,17 +14,21 @@ const offset = new THREE.Vector3();
 const move = new THREE.Vector3();
 const UP = new THREE.Vector3(0, 1, 0);
 
-function setKey(e, pressed) {
-  const k = e.key.toLowerCase();
-  if (k in keys) keys[k] = pressed;
-}
-
 function onKeyDown(e) {
-  setKey(e, true);
+  // Espacio: acción puntual (una vez por pulsación)
+  if (e.code === "Space") {
+    e.preventDefault(); // evita que la página haga scroll
+    if (!e.repeat && onSpace) onSpace();
+    return;
+  }
+
+  const k = e.key.toLowerCase();
+  if (k in keys) keys[k] = true;
 }
 
 function onKeyUp(e) {
-  setKey(e, false);
+  const k = e.key.toLowerCase();
+  if (k in keys) keys[k] = false;
 }
 
 export function initKeyboardControls(cam, orbitControls, options = {}) {
@@ -31,9 +36,15 @@ export function initKeyboardControls(cam, orbitControls, options = {}) {
   controls = orbitControls;
   speed = options.speed ?? speed;
   turnSpeed = options.turnSpeed ?? turnSpeed;
+  onSpace = options.onSpace ?? onSpace;
 
   window.addEventListener("keydown", onKeyDown);
   window.addEventListener("keyup", onKeyUp);
+}
+
+// Permite cambiar la acción del espacio en cualquier momento
+export function setSpaceAction(callback) {
+  onSpace = callback;
 }
 
 export function updateKeyboardControls(delta) {
@@ -64,4 +75,5 @@ export function disposeKeyboardControls() {
   window.removeEventListener("keydown", onKeyDown);
   window.removeEventListener("keyup", onKeyUp);
   keys.w = keys.a = keys.s = keys.d = false;
+  onSpace = null;
 }

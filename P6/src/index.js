@@ -2,6 +2,8 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { createSolarSystem, renderSolarSystem } from "./solar_system.js";
 import { initKeyboardControls, updateKeyboardControls } from "./keyboard_controls.js";
+import { write } from "./ui-logic.js";
+import { getNextData } from "./planets_info.js";
 
 let scene, renderer, camera, controls, keyboard;
 let info;
@@ -37,7 +39,15 @@ function init() {
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
 
-  initKeyboardControls(camera, controls, { speed: 40, turnSpeed: 1.2 });
+  initKeyboardControls(camera, controls, {
+    speed: 40,
+    turnSpeed: 1.2,
+    onSpace: () => {
+      let data = getNextData();
+      data = data["planet"] + "<br>" + data["fact"];
+      write(data);
+    },
+  });
 
   // Todo el dibujo del sistema solar está en sistemaSolar.js
   createSolarSystem(scene);

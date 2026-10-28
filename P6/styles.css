@@ -91,5 +91,22 @@ html, body {
   border-radius: 50%;
 }
 
+.texto-pantalla {
+  position: absolute;
+  /* Posición y tamaño aproximados del recuadro de la nave. Ajusta estos valores: */
+  top: 110px; 
+  left: 480px;
+  width: 220px;
+  height: 150px;
+  
+  z-index: 12; /* Entre la cabina (10) y el tutorial (15) */
+  color: #87ceeb; /* Color azul claro tipo holograma */
+  font-family: 'Courier New', Courier, monospace; /* Fuente de estilo terminal */
+  font-size: 16px;
+  text-shadow: 0 0 5px rgba(135, 206, 235, 0.8); /* Brillo para efecto de pantalla */
+  pointer-events: none;
+  overflow: hidden; /* Oculta el texto si excede el tamaño del recuadro */
+}
+
 input:checked + .slider { background-color: #2196F3; }
 input:checked + .slider:before { transform: translateX(20px); }
