@@ -1,10 +1,12 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { createMap, createLights } from "./map_drawer.js";
+import { createBus } from "./bus_drawer.js";
 
 let scene, renderer, camera, controls;
 let info;
-let mapa; 
+let mapa, bus;
+const clock = new THREE.Clock();
 
 init();
 animationLoop();
@@ -40,6 +42,16 @@ function init() {
   createMap(scene, { renderer })
     .then((m) => {
       mapa = m;
+      return createBus(scene, {
+        renderer,
+        mapa,                                  // para colocarlo sobre el terreno
+        pixel: [mapa.imgW / 2, mapa.imgH / 2], // píxel del mapa donde situarlo
+        altitud: 25,                           // el bus vuela sobre el mapa
+        size: 8,                               // lado más largo, en unidades de escena
+      });
+    })
+    .then((b) => {
+      bus = b;
       info.innerHTML = "Mapa Fortnite";
     })
     .catch((err) => {
@@ -52,6 +64,12 @@ function init() {
 // Bucle de animación
 function animationLoop() {
   requestAnimationFrame(animationLoop);
+
+  const delta = clock.getDelta();
+
+  if (bus) {
+    bus.update(delta);
+  }
 
   controls.update();
   renderer.render(scene, camera);
