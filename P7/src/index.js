@@ -1,8 +1,10 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { createMap, createLights } from "./map_drawer.js";
 
 let scene, renderer, camera, controls;
 let info;
+let mapa; 
 
 init();
 animationLoop();
@@ -18,21 +20,33 @@ function init() {
   info.style.backgroundColor = "transparent";
   info.style.zIndex = "8";
   info.style.fontFamily = "Monospace";
-  info.innerHTML = "three.js - sistema solar";
+  info.innerHTML = "three.js - mapa Fortnite";
   document.getElementById("app").appendChild(info);
 
-  // Escena y cámara
   scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x1b4b7a);
   camera = new THREE.PerspectiveCamera(60, 800 / 600, 0.1, 3000);
   camera.position.set(0, 45, 95);
 
-  // Renderizador vinculado al canvas
   const canvas = document.getElementById("miCanvas");
   renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
   renderer.setSize(800, 600, false);
 
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
+  controls.maxPolarAngle = Math.PI / 2.05;
+
+  createLights(scene);
+  createMap(scene, { renderer })
+    .then((m) => {
+      mapa = m;
+      info.innerHTML = "Mapa Fortnite";
+    })
+    .catch((err) => {
+      console.error(err);
+      info.style.color = "#ff8080";
+      info.innerHTML = "Error al crear el mapa: " + err.message;
+    });
 }
 
 // Bucle de animación
