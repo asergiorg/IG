@@ -138,6 +138,38 @@ export async function createBus(scene, opciones = {}) {
     group.rotation.y = Math.atan2(t.x, t.z) + o.rotationY; // el morro (+Z) mira hacia donde avanza
   }
 
+  function getPositionAtProgress(t) {
+    if (!curve) return null;
+
+    return curve.getPointAt( THREE.MathUtils.clamp(t, 0, 1) );
+  }
+
+  function getProgressAtPosition(position) {
+    if (!curve) return null;
+
+    const samples = 1000;
+
+    let bestProgress = 0;
+    let bestDistance = Infinity;
+
+    for (let i = 0; i <= samples; i++) {
+      const t = i / samples;
+      const point = curve.getPointAt(t);
+
+      const dx = point.x - position.x;
+      const dz = point.z - position.z;
+
+      const distanceSquared = dx * dx + dz * dz;
+
+      if (distanceSquared < bestDistance) {
+        bestDistance = distanceSquared;
+        bestProgress = t;
+      }
+    }
+
+    return bestProgress;
+  }
+
   function update(delta) {
     if (!o.vuelo) return;
     delta = Math.min(delta, 0.1); // evita saltos al volver de una pestaña inactiva
@@ -172,6 +204,12 @@ export async function createBus(scene, opciones = {}) {
     model,
     size: rawSize.multiplyScalar(scale),
     update,
+    getPosition: () => group.position.clone(),
+    getProgress: () => progress,
+    getRouteLength: () => routeLength,
+    getSpeed: () => o.velocidad,
+    getPositionAtProgress,
+    getProgressAtPosition,
     dispose,
   };
 }
