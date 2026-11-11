@@ -40,17 +40,14 @@ async function init() {
   document.getElementById("app").appendChild(info);
 
   scene = new THREE.Scene();
-
   scene.background = new THREE.Color(0x1b4b7a);
 
   camera = new THREE.PerspectiveCamera( 60, 800 / 600, 0.1, 3000 );
-
   camera.position.set( 0, 45, 95 );
 
   const canvas = document.getElementById("miCanvas");
 
   renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-
   renderer.setSize(800, 600, false);
 
   controls = new OrbitControls(camera, renderer.domElement);
