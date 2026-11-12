@@ -13,7 +13,7 @@ let controls;
 
 let info;
 
-let mapa;
+let map;
 let bus;
 let playerDrops;
 
@@ -24,7 +24,6 @@ animationLoop();
 
 async function init() {
   info = document.createElement("div");
-
   info.style.position = "absolute";
   info.style.top = "30px";
   info.style.width = "100%";
@@ -34,19 +33,16 @@ async function init() {
   info.style.backgroundColor = "transparent";
   info.style.zIndex = "8";
   info.style.fontFamily = "Monospace";
-
-  info.innerHTML = "Cargando mapa...";
-
+  info.innerHTML = "Fortnite OG";
   document.getElementById("app").appendChild(info);
 
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x1b4b7a);
+  scene.background = new THREE.Color(0x1E3F59);
 
   camera = new THREE.PerspectiveCamera( 60, 800 / 600, 0.1, 3000 );
   camera.position.set( 0, 45, 95 );
 
   const canvas = document.getElementById("miCanvas");
-
   renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
   renderer.setSize(800, 600, false);
 
@@ -57,13 +53,13 @@ async function init() {
   createLights(scene);
 
   try {
-    mapa = await createMap( scene, { renderer } );
+    map = await createMap( scene, { renderer } );
 
     bus = await createBus(
       scene,
       {
         renderer,
-        mapa,
+        mapa: map,
         vuelo: true,
         altitud: 25,
         size: 8,
@@ -73,7 +69,7 @@ async function init() {
 
     const players = await loadDropData();
 
-    playerDrops = createPlayerDrops( scene, mapa, players );
+    playerDrops = createPlayerDrops( scene, map, players );
     playerDrops.start(bus);
 
   } catch (err) {
