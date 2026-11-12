@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-const DEFFECTS = {
+const PRESETS = {
   colorMap: new URL("../images/Mapa_fortnite.jpg", import.meta.url).href,
   displacementMap: new URL("../images/Mapa_fortnite_displacement.png", import.meta.url).href,
 
@@ -17,7 +17,7 @@ const DEFFECTS = {
 };
 
 export async function createMap(scene, opciones = {}) {
-  const o = { ...DEFFECTS, ...opciones };
+  const mapInformation = { ...PRESETS, ...opciones };
 
   const loader = new THREE.TextureLoader();
   const load = (route) =>
@@ -27,24 +27,24 @@ export async function createMap(scene, opciones = {}) {
       );
     });
   const [mapColor, displacementMap] = await Promise.all([
-    load(o.colorMap),
-    load(o.displacementMap),
+    load(mapInformation.colorMap),
+    load(mapInformation.displacementMap),
   ]);
 
   mapColor.colorSpace = THREE.SRGBColorSpace;
-  mapColor.anisotropy = o.renderer
-    ? o.renderer.capabilities.getMaxAnisotropy()
-    : o.anisotropia;
+  mapColor.anisotropy = mapInformation.renderer
+    ? mapInformation.renderer.capabilities.getMaxAnisotropy()
+    : mapInformation.anisotropia;
 
   displacementMap.colorSpace = THREE.NoColorSpace;
 
   const imgW = mapColor.image.width;
   const imgH = mapColor.image.height;
-  const width = o.width;
+  const width = mapInformation.width;
   const height = width * (imgH / imgW);
 
   const reliefScale = 4;
-  const reliefSlant = -o.seaLevel * reliefScale;
+  const reliefSlant = -mapInformation.seaLevel * reliefScale;
 
   const heights = readChannel(displacementMap.image);
 
@@ -52,11 +52,11 @@ export async function createMap(scene, opciones = {}) {
     heights,
     displacementMap.image.width,
     displacementMap.image.height,
-    (reliefScale * o.normalRelief) / (width / displacementMap.image.width)
+    (reliefScale * mapInformation.normalRelief) / (width / displacementMap.image.width)
   );
 
-  const segX = o.segments;
-  const segY = Math.round(o.segments * (imgH / imgW));
+  const segX = mapInformation.segments;
+  const segY = Math.round(mapInformation.segments * (imgH / imgW));
   const geometry = new THREE.PlaneGeometry(width, height, segX, segY);
   geometry.rotateX(-Math.PI / 2);
 
@@ -93,22 +93,13 @@ export async function createMap(scene, opciones = {}) {
     const c = heights[y1 * rw + x0],
       d = heights[y1 * rw + x1];
     const value = (a * (1 - tx) + b * tx) * (1 - ty) + (c * (1 - tx) + d * tx) * ty;
-    return (value - o.seaLevel) * reliefScale;
+    return (value - mapInformation.seaLevel) * reliefScale;
   }
 
   function pixelToScene(px, py, elevacion = 0, destination = new THREE.Vector3()) {
     const x = (px / imgW - 0.5) * width;
     const z = (py / imgH - 0.5) * height;
     return destination.set(x, heightIn(x, z) + elevacion, z);
-  }
-
-  function dispose() {
-    scene.remove(mesh);
-    geometry.dispose();
-    material.dispose();
-    mapColor.dispose();
-    displacementMap.dispose();
-    texNormal.dispose();
   }
 
   return {
@@ -119,7 +110,6 @@ export async function createMap(scene, opciones = {}) {
     imgH,
     heightIn: heightIn,
     pixelToScene: pixelToScene,
-    dispose,
   };
 }
 
@@ -128,7 +118,6 @@ export function createLights(scene) {
   const sun = new THREE.DirectionalLight(0xfff1d6, 2.2);
   sun.position.set(-40, 50, 30);
   scene.add(hemisphere, sun);
-  return { hemi: hemisphere, sol: sun };
 }
 
 function readChannel(img) {

@@ -8,7 +8,7 @@ const DEFAULTS = {
 };
 
 export function createPlayerDrops(scene, map, players, options = {}) {
-  const o = { ...DEFAULTS, ...options };
+  const playerInformation = { ...DEFAULTS, ...options };
   const drops = [];
 
   let bus = null;
@@ -17,8 +17,8 @@ export function createPlayerDrops(scene, map, players, options = {}) {
   for (const data of players) {
 
     const destination = map.pixelToScene( data.pixel[0], data.pixel[1], 0);
-    const geometry = new THREE.SphereGeometry( o.size, 12, 12 );
-    const material = new THREE.MeshStandardMaterial({ color: o.color, });
+    const geometry = new THREE.SphereGeometry( playerInformation.size, 12, 12 );
+    const material = new THREE.MeshStandardMaterial({ color: playerInformation.color, });
     const mesh = new THREE.Mesh( geometry, material );
     mesh.visible = false;
 
@@ -44,12 +44,8 @@ export function createPlayerDrops(scene, map, players, options = {}) {
 
     bus = busObject;
 
-    console.log("=== INICIANDO SALTOS ===");
-
     const currentProgress = bus.getProgress();
     previousProgress = currentProgress;
-
-    console.log( "Progreso inicial del autobús:", currentProgress );
 
     for (const drop of drops) {
 
@@ -57,18 +53,10 @@ export function createPlayerDrops(scene, map, players, options = {}) {
       drop.elapsed = 0;
       drop.jumpAt = bus.getProgressAtPosition( drop.destination );
 
-      console.log(
-        `Jugador ${drop.id}:`,
-        "destino =",
-        drop.destination,
-        "jumpAt =",
-        drop.jumpAt
-      );
-
       const busPosition = bus.getPosition();
 
       drop.startPosition.copy( busPosition );
-      drop.startPosition.y += o.height;
+      drop.startPosition.y += playerInformation.height;
       drop.mesh.position.copy( drop.startPosition );
       drop.mesh.visible = true;
     }
@@ -84,24 +72,14 @@ export function createPlayerDrops(scene, map, players, options = {}) {
     for (const drop of drops) {
       if (drop.state === "waiting") {
 
-        const busPosition =bus.getPosition();
+        const busPosition = bus.getPosition();
 
         drop.mesh.position.copy( busPosition );
-        drop.mesh.position.y += o.height;
+        drop.mesh.position.y += playerInformation.height;
 
         if (drop.jumpAt === null) { continue; }
-
-        if ( currentProgress >= drop.jumpAt ) {
-          console.log(
-            `Jugador ${drop.id} SALTA:`,
-            `bus=${currentProgress.toFixed(3)}`,
-            `objetivo=${drop.jumpAt.toFixed(3)}`
-          );
-
-          beginFall(drop);
-        }
+        if ( currentProgress >= drop.jumpAt ) { beginFall(drop); }
       }
-
       else if (drop.state === "falling") { updateFall(drop, delta); }
     }
   }
@@ -117,7 +95,7 @@ export function createPlayerDrops(scene, map, players, options = {}) {
     drop.elapsed += delta;
 
     const distance = drop.startHeight - drop.destination.y;
-    const duration = Math.max( distance / o.speed, 0.5 );
+    const duration = Math.max( distance / playerInformation.speed, 0.5 );
     const t = THREE.MathUtils.clamp( drop.elapsed / duration, 0, 1 );
 
     drop.mesh.position.x = THREE.MathUtils.lerp( drop.startPosition.x, drop.destination.x, t );
@@ -127,46 +105,28 @@ export function createPlayerDrops(scene, map, players, options = {}) {
     if (t >= 1) {
       drop.state = "landed";
       drop.mesh.position.copy( drop.destination );
-
-      console.log( `Jugador ${drop.id} HA ATERRIZADO` );
     }
   }
 
   function resetForNewRoute() {
-    console.log("=== NUEVA RUTA DEL AUTOBÚS ===");
-
     const currentProgress = bus.getProgress();
 
     for (const drop of drops) {
       drop.state = "waiting";
       drop.elapsed = 0;
 
-      // Calcular dónde debe saltar usando la NUEVA ruta
+      // Calcular dónde debe saltar usando la nueva ruta
       drop.jumpAt = bus.getProgressAtPosition( drop.destination );
 
       const busPosition = bus.getPosition();
 
       drop.mesh.position.copy(busPosition );
-      drop.mesh.position.y +=o.height;
+      drop.mesh.position.y +=playerInformation.height;
       drop.mesh.visible = true;
-
-      console.log(
-        `Jugador ${drop.id}: nuevo jumpAt =`,
-        drop.jumpAt
-      );
     }
 
     previousProgress = currentProgress;
   }
 
-  function dispose() {
-    for (const drop of drops) {
-      scene.remove(drop.mesh);
-
-      drop.mesh.geometry.dispose();
-      drop.mesh.material.dispose();
-    }
-  }
-
-  return { start, update, dispose, drops };
+  return { start, update, drops };
 }
