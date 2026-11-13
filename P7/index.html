@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <title>Mapa</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <button id="btn-info" aria-label="Información" title="Información">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+    </button>
+
+    <div id="modal-info" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+      <div class="modal-contenido">
+        <button id="cerrar-modal" aria-label="Cerrar">&times;</button>
+        <h2 id="modal-titulo">Información</h2>
+        <p>
+          Fortnite es un videojuego gratuito y colorido, parecido a Los Juegos del Hambre, donde cien personas caen en una isla para buscar armas, construir refugios y eliminarse entre sí hasta que solo quede un superviviente. Lo que se muestra es una representación del salto de los jugadores al inicio de la partida.
+        </p>
+      </div>
+    </div>
+
+    <div id="app">
+      <canvas id="miCanvas" width="800" height="600"></canvas>
+    </div>
+
+    <audio autoplay loop>
+      <source src="audio/battle-bus.mp3" type="audio/mpeg">
+    </audio>
+
+    <script type="module" src="src/index.js"></script>
+    <script type="module" src="src/info_manager.js"></script>
+  </body>
+</html>
