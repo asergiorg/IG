@@ -386,6 +386,13 @@ Para finalizar, en la función `resetForNewRoute` se reposicionan los jugadores 
   }
 ~~~
 
+# Demostación
+
+https://github.com/user-attachments/assets/b688b04b-8171-4146-916f-c6b2ab44277f
+
+[▶️ Vídeo demostración de mayor calidad con autoría](https://drive.google.com/file/d/1MyfxtaWypEo0GwY2UXgXvpqhzXJCvPz1/view?usp=sharing) <br>
+[▶️ Vídeo demostración de mayor calidad sin autoría](https://drive.google.com/file/d/1zK9VLaPZU2UbI5FPkp0x542qXS8nWxui/view?usp=sharing)
+
 # Fuentes
 
 - Para obtener el mapa: https://fortnite.fandom.com/wiki/Athena
