@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-import { dropletShader, animate, onWindowResize } from "./scene_renderer";
+import { initializeRendererWith, dropletShader, animate, onWindowResize, planeShader } from "./scene_renderer";
 
 let scene, renderer;
 let camera;
@@ -27,7 +27,9 @@ function init() {
   document.body.appendChild(renderer.domElement);
 
   //Con color sólido
-  dropletShader({x:-3.0, y:0, z:0}, 1, {horizontal:10, vertical: 10}, scene);
+  initializeRendererWith(scene);
+  dropletShader({x:-3.0, y:0, z:0}, 1, {horizontal:10, vertical: 10});
+  planeShader(100, 100);
 
   camcontrols = new OrbitControls(camera, renderer.domElement);
 
