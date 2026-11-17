@@ -2,7 +2,6 @@ import * as THREE from "three";
 import { vertexShader, dropletFragmentShader, planeFragmentShader } from "./shader_manager";
 
 let objects = [];
-let scene;
 
 let uniforms = {
     u_time: {
@@ -19,10 +18,6 @@ let uniforms = {
     },
 };
 
-export function initializeRendererWith(referenceScene) {
-    scene = referenceScene;
-}
-
 export function dropletShader(position, radio, segements) {
   let geometry = new THREE.SphereGeometry(radio, segements.horizontal, segements.vertical);
   let material = new THREE.ShaderMaterial({
@@ -33,8 +28,8 @@ export function dropletShader(position, radio, segements) {
 
   let mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(position.x, position.y, position.z);
-  scene.add(mesh);
   objects.push(mesh);
+  return mesh;
 }
 
 export function planeShader(width, height) {
@@ -46,9 +41,8 @@ export function planeShader(width, height) {
   });
 
   let mesh = new THREE.Mesh(geometry, material);
-  mesh.geometry.rotateX(- Math.PI / 2);
-  scene.add(mesh);
   objects.push(mesh);
+  return mesh;
 }
 
 export function animate() {
