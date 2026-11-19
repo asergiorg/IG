@@ -222,3 +222,5 @@ https://github.com/user-attachments/assets/8170e6ab-2b67-4acc-aeaa-87e77da3ec25
 
 - Para generar el patrón de Mandelbrot: https://chatgpt.com/share/6aff50de-def0-83eb-b412-7cf56c577546
 
+- Para traducir el shader a la versión más ligera: https://drive.google.com/file/d/1uTT8GqhjP3XVv49qbLAHJha3NB6sre2F/view?usp=sharing
+
