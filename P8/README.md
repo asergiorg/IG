@@ -210,6 +210,10 @@ return `
 
 # Demostación
 
+https://github.com/user-attachments/assets/8170e6ab-2b67-4acc-aeaa-87e77da3ec25
+
+[▶️ Vídeo demostración de mayor calidad](https://drive.google.com/file/d/1uTT8GqhjP3XVv49qbLAHJha3NB6sre2F/view?usp=sharing)
+
 # Fuentes
 
 ## Conversaciones con la IA
