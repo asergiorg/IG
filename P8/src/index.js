@@ -1,46 +1,54 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { planeShader, setupMouse, animate, onWindowResize } from "./object_renderer";
 
-import { dropletShader, planeShader , animate, onWindowResize } from "./object_renderer";
-
-let scene, renderer;
-let camera;
-let camcontrols;
+let scene, renderer, camera, camcontrols;
 
 init();
 animationLoop();
 
 function init() {
-    camera = new THREE.PerspectiveCamera(
-        45,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        1000
-    );
-    camera.position.set(0, 0, 15);
+  const info = document.createElement("div");
+  info.style.position = "absolute";
+  info.style.top = "30px";
+  info.style.left = "0";
+  info.style.width = "100%";
+  info.style.textAlign = "center";
+  info.style.color = "#fff";
+  info.style.fontWeight = "bold";
+  info.style.backgroundColor = "transparent";
+  info.style.zIndex = "8";
+  info.style.fontFamily = "Monospace";
+  info.style.pointerEvents = "none";
+  info.innerHTML = "Ángel Sergio Reyes Guedes";
 
-    scene = new THREE.Scene();
-    renderer = new THREE.WebGLRenderer();
-    renderer.setPixelRatio(window.devicePixelRatio);
+  document.body.appendChild(info);
 
-    document.body.appendChild(renderer.domElement);
+  camera = new THREE.PerspectiveCamera(
+    45,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
+  camera.position.set(0, 0, 15);
 
-    //Con color sólido
-    scene.add(dropletShader({x:-3.0, y:0, z:0}, 1, {horizontal:10, vertical: 10}));
-    scene.add(planeShader(100, 100));
+  scene = new THREE.Scene();
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  document.body.appendChild(renderer.domElement);
 
-    camcontrols = new OrbitControls(camera, renderer.domElement);
+  scene.add(planeShader(100, 100));
 
-    //Dmensiones iniciales
-    onWindowResize(renderer);
-    window.addEventListener("resize", onWindowResize, false);
+  camcontrols = new OrbitControls(camera, renderer.domElement);
+  setupMouse(camera);
+
+  onWindowResize(renderer, camera);
+  window.addEventListener("resize", () => onWindowResize(renderer, camera), false);
 }
 
-//Bucle de visualización
 function animationLoop() {
-    requestAnimationFrame(animationLoop);
-
-    animate();
-
-    renderer.render(scene, camera);
+  requestAnimationFrame(animationLoop);
+  camcontrols.update();
+  animate();
+  renderer.render(scene, camera);
 }
