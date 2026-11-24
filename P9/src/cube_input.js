@@ -28,7 +28,6 @@ export function setupCubeInput({ camera, domElement, controls, cubies }) {
   };
 
   function onPointerDown(e) {
-    console.log("pointerdown", e.target, busy);
     if (busy || e.target !== domElement) return;
 
     const r = domElement.getBoundingClientRect();
@@ -38,13 +37,10 @@ export function setupCubeInput({ camera, domElement, controls, cubies }) {
     );
     raycaster.setFromCamera(pointer, camera);
 
-    console.log("cubies:", cubies?.length);
     const hit = raycaster.intersectObjects(cubies, true)[0];
-    console.log("hit:", hit);
     if (!hit) return;
 
     const cubie = findCubie(hit.object);
-    console.log("cubie:", cubie);
     if (!cubie) return;
 
     // Normal de la cara en coordenadas de mundo
@@ -88,10 +84,15 @@ export function setupCubeInput({ camera, domElement, controls, cubies }) {
     const dWorld = UNIT[best.t].clone().multiplyScalar(Math.sign(best.dot));
     const dir = Math.sign(dWorld.dot(UNIT[rotAxis].clone().cross(drag.normal)));
 
-    drag = null; // un movimiento por gesto
+    drag = null;
     busy = true;
-    await rotateLayer(rotAxis, layer, dir);
-    busy = false;
+    try {
+      await rotateLayer(rotAxis, layer, dir);
+    } catch (err) {
+      console.error("rotateLayer falló:", err);
+    } finally {
+      busy = false;
+    }
   }
 
   function onPointerUp() {

@@ -20,6 +20,7 @@ const COLORS = {
 const INNER_COLOR = 0x111111;
 
 export const cubeGroup = new THREE.Group();
+const tweenGroup = new TWEEN.Group();
 export const cubies = [];
 
 export function createCube() {
@@ -58,15 +59,13 @@ export function rotateLayer(axis, layer, dir = 1, duration = 400) {
   selected.forEach((c) => pivot.attach(c));
 
   return new Promise((resolve) => {
-    new TWEEN.Tween({ angle: 0 })
+    const tween = new TWEEN.Tween({ angle: 0 })
       .to({ angle: dir * Math.PI / 2 }, duration)
       .easing(TWEEN.Easing.Quadratic.InOut)
       .onUpdate(({ angle }) => {
-        console.log("angle", angle);
         pivot.rotation[axis] = angle;
       })
       .onComplete(() => {
-        console.log("complete");
         pivot.updateMatrixWorld(true);
         selected.forEach((c) => {
           cubeGroup.attach(c);
@@ -82,10 +81,15 @@ export function rotateLayer(axis, layer, dir = 1, duration = 400) {
           );
         });
         cubeGroup.remove(pivot);
+        tweenGroup.remove(tween);
         resolve();
-      })
-      .start();
+      });
+
+    tweenGroup.add(tween);
+    tween.start();
   });
 }
 
-export function animateCube() { TWEEN.update(); }
+export function animateCube() {
+  tweenGroup.update();
+}
