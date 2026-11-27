@@ -199,7 +199,7 @@ Este apartado se desarrolló principalmente con Inteligencia Artificial, ya que 
 
 ### Demostración
 
-
+https://github.com/user-attachments/assets/a2e3c723-9fd7-4fd9-a6c6-728827828378
 
 ## 3. Interfaz gráfica
 
@@ -249,6 +249,18 @@ export function initInterface() {
 Estos dos ficheros fueron creados por la IA. En ellos se calcula la secuencia de movimientos necesarios para poder resolver el cubo. El primero conecta el cubo creado con el segundo fichero, enviándole información sobre el estado del cubo y aplicando la secuencia de movimientos que calcula el segundo script. El segundo actúa únicamente como resolver, retornando la secuencia de movimientos en función del algoritmo para una posición determinada.
 
 ### Demostraciones
+
+#### Deshacer el cubo
+
+https://github.com/user-attachments/assets/40264564-c66e-4533-b304-0b1cf3e2d4a3
+
+#### Resolución para principiantes
+
+https://github.com/user-attachments/assets/b436be7c-f95a-47f5-9060-cda54b203a8d
+
+#### Resolución CFOP
+
+https://github.com/user-attachments/assets/f45dbbed-e8da-4f3c-a5c0-7734d1be650a
 
 # Fuentes
 
