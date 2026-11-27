@@ -2,10 +2,21 @@
 
 Esta práctica consiste en un prototipo de una app web que permite a sus usuarios manejar un cubo de Rubik. Esta puede ser usada para resolver el cubo o aprender a resolverlo, ya que se han implementado, mediante Inteligencia Artificial, dos resoluciones para el cubo, la implementación para principiantes, que posee una menor cantidad de algoritmos que memorizar para la resolución, y una versión algo más compleja, llamada CFOP, que permite reducir el tiempo de resolución del cubo a costa de tener que memorizar una mayor cantidad de algoritmos.
 
-Para el desarrollo de esta práctica se ha dividido la lógica en diferentes ficheros para mejorar la legibilidad y la calidad del código, resultando en la siguiente estructura: 
+Para el desarrollo de esta práctica se ha dividido la lógica en diferentes ficheros para mejorar la legibilidad y la calidad del código, resultando en la siguiente estructura:
 
 ```text
-
+P9
+├── index.html
+├── README.md
+├── src
+│   ├── cube_controller.js
+│   ├── cube_input.js
+│   ├── cube.js
+│   ├── index.js
+│   ├── position_manager.js
+│   ├── rubik_solver.js
+│   └── ui_manager.js
+└── styles.css
 ```
 
 De estos ficheros, los siguientes fueron desarrollados con Inteligencia Artificial, por lo que no se explicarán de forma detallada en este documento, a excepción de alguna función que sea relevante: `cube_controller.js`, `rubik_solver.js` y `cube_input.js`.
@@ -79,7 +90,7 @@ export function rotateLayer(axis, layer, dir = 1, duration = 400) {
         tweenGroup.remove(tween);
 
         applyMove(axis, layer, dir);
-        
+
         resolve();
       });
 
