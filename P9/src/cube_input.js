@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { rotateLayer } from "./figure_manager";
+import { rotateLayer } from "./cube";
 
 const AXES = ["x", "y", "z"];
 const UNIT = {

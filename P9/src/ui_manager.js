@@ -1,11 +1,11 @@
 import GUI from 'lil-gui';
-import { solveBeginnerMethod, solveCFOPMethod, scrambleCube } from './cubeController';
+import { solveBeginnerMethod, solveCFOPMethod, scrambleCube } from './cube_controller';
 
-let ocupado = false;
+let busy = false;
 async function execute(fn) {
-  if (ocupado) return;
-  ocupado = true;
-  try { await fn(); } finally { ocupado = false; }
+  if (busy) return;
+  busy = true;
+  try { await fn(); } finally { busy = false; }
 }
 
 const params = {

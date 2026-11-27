@@ -40,8 +40,8 @@ const FACE_DIRS = {
   pz: [0, 0, 1], nz: [0, 0, -1],
 };
 
-const faceKeyOf = (v) =>
-  Object.keys(FACE_DIRS).find((k) => FACE_DIRS[k].every((n, i) => n === v[i]));
+const faceKeyOf = (vector) =>
+  Object.keys(FACE_DIRS).find((k) => FACE_DIRS[k].every((n, i) => n === vector[i]));
 
 function rotateVec([x, y, z], axis, dir) {
   let r;
@@ -54,7 +54,7 @@ function rotateVec([x, y, z], axis, dir) {
     else if (axis === 'y') r = [-z, y, x];
     else r = [y, -x, z];
   }
-  return r.map((n) => n + 0); // evita -0
+  return r.map((n) => n + 0);
 }
 
 export function applyMove(axis, layer, dir) {
@@ -76,8 +76,4 @@ export function applyMove(axis, layer, dir) {
 
 export function getCubeState() {
   return structuredClone(pieces);
-}
-
-export function resetCubeState() {
-  pieces = structuredClone(INITIAL_PIECES);
 }

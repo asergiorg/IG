@@ -1,12 +1,12 @@
 /**
- * cubeController.js
+ * cube_controller.js
  * Conecta el solver (rubikSolver.js) con tu cubo:
  *   - lee el estado con getCubeState()
  *   - ejecuta los movimientos con rotateLayer(axis, layer, dir, duration)
  */
 import { getCubeState } from './position_manager.js';
-import { rotateLayer } from "./figure_manager.js";
-import { solveBeginner, solveCFOP, tokenToTurn, isCubeSolved } from './rubikSolver.js';
+import { rotateLayer } from "./cube.js";
+import { solveBeginner, solveCFOP, tokenToTurn, isCubeSolved } from './rubik_solver.js';
 
 // ---------------------------------------------------------------------------
 // CONFIGURACIÓN

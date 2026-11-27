@@ -2,7 +2,7 @@ import * as THREE from "three";
 import * as TWEEN from '@tweenjs/tween.js';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-import { createCube, animateCube, cubies } from "./figure_manager"; // exporta cubies
+import { createCube, animateCube, cubies } from "./cube"; // exporta cubies
 import { setupCubeInput } from "./cube_input";
 import { initInterface } from "./ui_manager";
 

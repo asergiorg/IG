@@ -93,6 +93,4 @@ export function rotateLayer(axis, layer, dir = 1, duration = 400) {
   });
 }
 
-export function animateCube() {
-  tweenGroup.update();
-}
+export function animateCube() { tweenGroup.update(); }
