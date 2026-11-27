@@ -4,4 +4,5 @@ En este repositorio se encuentran las diferentes prácticas del segundo bloque d
 
 - [Práctica 6](P6/README.md)
 - [Práctica 7](P7/README.md)
-- [Práctica 8](P78/README.md)
+- [Práctica 8](P8/README.md)
+- [Práctica 9](P9/README.md)
