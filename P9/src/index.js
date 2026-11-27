@@ -4,6 +4,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 import { createCube, animateCube, cubies } from "./figure_manager"; // exporta cubies
 import { setupCubeInput } from "./cube_input";
+import { initInterface } from "./ui_manager";
 
 let scene, renderer, camcontrols;
 let camera;
@@ -35,6 +36,8 @@ function init() {
     controls: camcontrols,
     cubies,
   });
+
+  initInterface();
 }
 
 //Bucle de animación

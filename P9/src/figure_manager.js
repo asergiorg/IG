@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import * as TWEEN from '@tweenjs/tween.js';
 
-import { getCubeState } from './position_manager'
+import { getCubeState, applyMove } from './position_manager';
 
 const SIZE = 1;
 const GAP = 0.05;
@@ -82,6 +82,9 @@ export function rotateLayer(axis, layer, dir = 1, duration = 400) {
         });
         cubeGroup.remove(pivot);
         tweenGroup.remove(tween);
+
+        applyMove(axis, layer, dir);
+        
         resolve();
       });
 

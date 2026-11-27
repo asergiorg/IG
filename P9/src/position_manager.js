@@ -1,4 +1,4 @@
-const pieces = [
+const INITIAL_PIECES = [
   // esquinas
   { position: [1, 1, 1],    faces: { px: 'red', py: 'white', pz: 'blue' } },
   { position: [1, 1, -1],   faces: { px: 'red', py: 'white', nz: 'green' } },
@@ -30,4 +30,54 @@ const pieces = [
   { position: [0, 0, -1], faces: { nz: 'green' } },
 ]
 
-export function getCubeState() { return pieces; }
+let pieces = structuredClone(INITIAL_PIECES);
+
+const AXIS_INDEX = { x: 0, y: 1, z: 2 };
+
+const FACE_DIRS = {
+  px: [1, 0, 0], nx: [-1, 0, 0],
+  py: [0, 1, 0], ny: [0, -1, 0],
+  pz: [0, 0, 1], nz: [0, 0, -1],
+};
+
+const faceKeyOf = (v) =>
+  Object.keys(FACE_DIRS).find((k) => FACE_DIRS[k].every((n, i) => n === v[i]));
+
+function rotateVec([x, y, z], axis, dir) {
+  let r;
+  if (dir > 0) {
+    if (axis === 'x') r = [x, -z, y];
+    else if (axis === 'y') r = [z, y, -x];
+    else r = [-y, x, z];
+  } else {
+    if (axis === 'x') r = [x, z, -y];
+    else if (axis === 'y') r = [-z, y, x];
+    else r = [y, -x, z];
+  }
+  return r.map((n) => n + 0); // evita -0
+}
+
+export function applyMove(axis, layer, dir) {
+  const d = Math.sign(dir);
+  const idx = AXIS_INDEX[axis];
+
+  pieces.forEach((piece) => {
+    if (piece.position[idx] !== layer) return;
+
+    piece.position = rotateVec(piece.position, axis, d);
+
+    const newFaces = {};
+    for (const [face, color] of Object.entries(piece.faces)) {
+      newFaces[faceKeyOf(rotateVec(FACE_DIRS[face], axis, d))] = color;
+    }
+    piece.faces = newFaces;
+  });
+}
+
+export function getCubeState() {
+  return structuredClone(pieces);
+}
+
+export function resetCubeState() {
+  pieces = structuredClone(INITIAL_PIECES);
+}
